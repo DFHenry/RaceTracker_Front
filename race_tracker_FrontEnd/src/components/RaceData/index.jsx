@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import RaceData from "../props/RaceData/raceData";
-import {Link} from "react-router";
+import RacerReg from "../props/RacerReg/racerReg";
 
 export default function getRacingData()
 {
     const [count, setCount] = useState(0);
     const [racingData, setRaceData] = useState("");
+    const [racers, setRacers] = useState([]);
+
+    const racerArray = [];
 
     useEffect(() =>
     {
@@ -17,6 +20,7 @@ export default function getRacingData()
             let data = await response.json();
 
             setRaceData(data);
+            setRacers(data.racers);
         }
         getData();
 
@@ -35,15 +39,45 @@ export default function getRacingData()
     return(
         <div>
             <p>Standby For A New Race</p>
-            <p>{count}</p>
+            
         </div>
     )}
-    else
+    else if(racingData.raceState == "registration")
     {
-    return(
-        <div>
-            <p>Registration Is Active!</p>
-            <p>{count}</p>
-        </div>
-    )}        
+        console.log(racerArray.racers);
+        if(racerArray.length > racingData.racers.length)
+        {
+            racerArray.push(racingData.racers.length - 1);
+        }
+    
+        return(
+        <>
+            <p>Registration is Active!</p>
+            <table>
+                <thead>
+                    <th>Racer Name</th>
+                    <th>Vehicle Number</th>
+                </thead>
+                <tbody>
+                    {racers.map((m, i) =>
+                    <tr key={i}>
+                        <td>{m.racerName}</td>
+                        <td>{m.vehicleNumber}</td>
+                    </tr>
+            )}
+                </tbody>
+            </table>
+
+        </>
+        // <div>
+        //     <p>Registration Is Active!</p>
+        //     racers.map((m, i) =>
+        //     (
+        //         <div key={i}>
+        //             <p></p>
+        //         </div>
+        //     ))
+        // </div>
+        );
+    }
 }

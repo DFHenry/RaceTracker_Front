@@ -4,7 +4,6 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router';
 import Standby from "../pages/Standby";
 
-
 function App() 
 {
 
