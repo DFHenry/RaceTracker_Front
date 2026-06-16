@@ -51,33 +51,33 @@ export default function getRacingData()
         }
     
         return(
-        <>
-            <p>Registration is Active!</p>
-            <table>
-                <thead>
-                    <th>Racer Name</th>
-                    <th>Vehicle Number</th>
-                </thead>
-                <tbody>
-                    {racers.map((m, i) =>
-                    <tr key={i}>
-                        <td>{m.racerName}</td>
-                        <td>{m.vehicleNumber}</td>
-                    </tr>
-            )}
-                </tbody>
-            </table>
+            <>
+                <p>Registration is Active!</p>
+                <table>
+                    <thead>
+                        <th>Racer Name</th>
+                        <th>Vehicle Number</th>
+                    </thead>
+                    <tbody>
+                        {racers.map((m, i) =>
+                        <tr key={i}>
+                            <td>{m.racerName}</td>
+                            <td>{m.vehicleNumber}</td>
+                        </tr>
+                )}
+                    </tbody>
+                </table>
 
-        </>
-        // <div>
-        //     <p>Registration Is Active!</p>
-        //     racers.map((m, i) =>
-        //     (
-        //         <div key={i}>
-        //             <p></p>
-        //         </div>
-        //     ))
-        // </div>
+            </>
         );
+    }
+
+    else if(racingData.raceState == "starting")
+    {
+        return(
+            <>
+                <p>Get Ready To Race!</p>
+            </>
+        )
     }
 }
