@@ -9,6 +9,7 @@ export default function getRacingData()
     const [count, setCount] = useState(0);
     const [racingData, setRaceData] = useState("");
     const [racers, setRacers] = useState([]);
+    const [noOfLaps, setNoOfLaps] = useState(0);
     const [noOfRacers, setNoOfRacers] = useState(0);
     const [laps, setLaps] = useState([]);
 
@@ -24,16 +25,22 @@ export default function getRacingData()
     const [lapDisplay, setNewLap] = useState([]);
     const [lapIndex, setLapIndex] = useState(0);
 
+    //final positions variables
+    const [finalPositions, setFinalPositions] = useState([]);
+    const [lapCounter, setLapCounter] = useState(0);
+
+
     //useEffect for fetching API Data
     useEffect(() =>
     {
         const getData = async () => 
         {
-            let response = await fetch("http://localhost:8888/api/sendApi");
+            let response = await fetch("http://localhost:8888/api/sendApi/raceData");
             let data = await response.json();
 
             setRaceData(data);
             setRacers(data.racers);
+            setNoOfLaps(data.noOfLaps);
             setLaps(data.laps);
             setNoOfRacers(data.racers.length);
         }
@@ -92,6 +99,13 @@ export default function getRacingData()
         setNewLap(prev => [...prev, racingData.laps[lapIndex]]);
         setLapIndex(prev => prev + 1);
 
+        //check of all racers have completed all laps
+        // if(lapCounter == noOfLaps)
+        // {
+        //     console.log("race is concluding");
+        //     setFinalPositions(lapDisplay);
+        // }
+
     }, [racingData.laps, lapDisplay.length, lapIndex, noOfRacers]);
 
     //useEffect for clearing lap data once all racers have completed a lap, after 5 seconds
@@ -99,20 +113,23 @@ export default function getRacingData()
     {
         //check for valid lap data
         if (noOfRacers <= 0 || lapDisplay.length !== noOfRacers)
-            {
-                return;
-            }
+        {
+            return;
+        }
 
         //clear lap data after 5 seconds
-        const clearTimer = window.setTimeout(() => {
+        const clearTimer = window.setTimeout(() => 
+        {
+            setFinalPositions(lapDisplay);
             setNewLap([]);
         }, 5000);
 
         //cleanup timer
-        return () => {
+        return () => 
+        {
             window.clearTimeout(clearTimer);
         };
-    }, [lapDisplay.length, noOfRacers]);
+    }, [lapDisplay.length, noOfRacers, finalPositions]);
 
     //countdown variables
     const countdownTimer = Math.floor(countdown);
@@ -145,6 +162,7 @@ export default function getRacingData()
         }
     }
 
+    //resets all lap information when race is not running
     function countReset()
     {
         setCountdown(9);
@@ -154,6 +172,7 @@ export default function getRacingData()
         setLaps([]);
         setNewLap([]);
         setLapIndex(0);
+        setLapCounter(0);
     }
 
     if(countdownTimer > 0)
@@ -257,12 +276,25 @@ export default function getRacingData()
         return(
             <>
                 <p>Race Has Concluded</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Final Position</th>
+                            <th>Name</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {finalPositions.map((m, i) =>
+                            <tr key={i}>
+                                <td>{m.polePosition}</td>
+                                <td>{m.lapRacer}</td>
+                                <td>{m.lapTime}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </>
         )
     }
-
-    // else if (racingData.raceState == "concluded")
-    // {
-
-    // }
 }
