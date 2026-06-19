@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RaceData from "../props/RaceData/raceData";
 import RacerReg from "../props/RacerReg/racerReg";
+import Laps from "../props/Laps/laps";
 
 export default function getRacingData()
 {
@@ -8,6 +9,8 @@ export default function getRacingData()
     const [count, setCount] = useState(0);
     const [racingData, setRaceData] = useState("");
     const [racers, setRacers] = useState([]);
+    const [noOfRacers, setNoOfRacers] = useState(0);
+    const [laps, setLaps] = useState([]);
 
     //countdown variables
     const [countdown, setCountdown] = useState(10);
@@ -16,9 +19,12 @@ export default function getRacingData()
     //stopwatch variables
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    
+    //lap display variables
+    const [lapDisplay, setNewLap] = useState([]);
+    const [lapIndex, setLapIndex] = useState(0);
 
-    const racerArray = [];
-
+    //useEffect for fetching API Data
     useEffect(() =>
     {
         const getData = async () => 
@@ -28,37 +34,29 @@ export default function getRacingData()
 
             setRaceData(data);
             setRacers(data.racers);
-
-            // if(getRacingData.raceState != "running")
-            // {
-            //     setCountDownOn(false);
-            //     setCountdown(10);
-            //     setIsRunning(false);
-            //     setTime(0);
-            // }
+            setLaps(data.laps);
+            setNoOfRacers(data.racers.length);
         }
         getData();
 
         const timer = setInterval(() => 
         {
-            setCount((prevCount) => prevCount + 1);
+            setCount(prevCount => prevCount + 1);
             getData();
+        }, 650);
 
-        }, 750);
-
+        //countdown and stopwatch variables
         let countdownId;
-
         let intervalId;
 
         if(countdownOn)
         {
-            countdownId = setInterval(() => setTime(countdown - 1), 1000);
-            console.log(countdown);
+            countdownId = setInterval(() => setTime(prev => prev - 1), 1000);
         }
 
         if(isRunning)
         {
-            intervalId = setInterval(() => setTime(time + 1), 10);
+            intervalId = setInterval(() => setTime(prev => prev + 1), 10);
         }
 
         return () => 
@@ -67,9 +65,56 @@ export default function getRacingData()
                 clearInterval(intervalId);
                 clearInterval(timer); 
             }
+    }, [countdownOn, isRunning]);
 
-    }, [countdownOn, countdown, isRunning, time]);
+    //useEffect for displaying laps
+    useEffect(() =>
+    {
+        //check for valid lap data
+        if (!Array.isArray(racingData?.laps) || noOfRacers <= 0)
+        {
+            return;
+        } 
 
+        //check if all racers have completed a lap
+        if (lapDisplay.length >= noOfRacers)
+        {
+            return;
+        } 
+
+        //check if lap index is out of bounds
+        if (lapIndex >= racingData.laps.length)
+        {
+            return;
+        }
+
+        //update lapDisplay and lapIndex
+        setNewLap(prev => [...prev, racingData.laps[lapIndex]]);
+        setLapIndex(prev => prev + 1);
+
+    }, [racingData.laps, lapDisplay.length, lapIndex, noOfRacers]);
+
+    //useEffect for clearing lap data once all racers have completed a lap, after 5 seconds
+    useEffect(() => 
+    {
+        //check for valid lap data
+        if (noOfRacers <= 0 || lapDisplay.length !== noOfRacers)
+            {
+                return;
+            }
+
+        //clear lap data after 5 seconds
+        const clearTimer = window.setTimeout(() => {
+            setNewLap([]);
+        }, 5000);
+
+        //cleanup timer
+        return () => {
+            window.clearTimeout(clearTimer);
+        };
+    }, [lapDisplay.length, noOfRacers]);
+
+    //countdown variables
     const countdownTimer = Math.floor(countdown);
     let goMessage = "";
 
@@ -79,7 +124,17 @@ export default function getRacingData()
 
     const watchMilliseconds = time % 100;
 
-    setTimeout(countDownGoDown, 1000);
+    //let curNoOfracers = noOfRacers + 0;
+
+    if(racingData.raceState == "running")
+    {
+        setTimeout(countDownGoDown, 1000);
+    }
+
+    if(racingData.raceState != "running")
+    {
+        setTimeout(countReset, 1000);
+    }
 
     function countDownGoDown()
     {
@@ -88,6 +143,17 @@ export default function getRacingData()
         {
             setIsRunning(true);
         }
+    }
+
+    function countReset()
+    {
+        setCountdown(9);
+        setCountDownOn(false);
+        setTime(0);
+        setIsRunning(false);
+        setLaps([]);
+        setNewLap([]);
+        setLapIndex(0);
     }
 
     if(countdownTimer > 0)
@@ -108,6 +174,7 @@ export default function getRacingData()
         goMessage = "";
     }
 
+    //race states and rendering
     if(racingData.raceState == "standby")
     {
         return(
@@ -118,13 +185,7 @@ export default function getRacingData()
     }
 
     else if(racingData.raceState == "registration")
-    {
-        //console.log(racerArray.racers);
-        if(racerArray.length > racingData.racers.length)
-        {
-            racerArray.push(racingData.racers.length - 1);
-        }
-    
+    {    
         return(
             <>
                 <p>Registration is Active!</p>
@@ -138,11 +199,11 @@ export default function getRacingData()
                     </thead>
                     <tbody>
                         {racers.map((m, i) =>
-                        <tr key={i}>
-                            <td>{m.racerName}</td>
-                            <td>{m.vehicleNumber}</td>
-                        </tr>
-                )}
+                            <tr key={i}>
+                                <td>{m.racerName}</td>
+                                <td>{m.vehicleNumber}</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
 
@@ -169,6 +230,24 @@ export default function getRacingData()
                    {watchSeconds.toString().padStart(2, "0")}:
                    {watchMilliseconds.toString().padStart(2, "0")} 
                 </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Racer</th>
+                            <th>Lap Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {lapDisplay.map((m, i) => 
+                            <tr key={i}>
+                                <td>{m.polePosition}</td>
+                                <td>{m.lapRacer}</td>
+                                <td>{m.lapTime}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </>
         );
     }
@@ -181,4 +260,9 @@ export default function getRacingData()
             </>
         )
     }
+
+    // else if (racingData.raceState == "concluded")
+    // {
+
+    // }
 }
