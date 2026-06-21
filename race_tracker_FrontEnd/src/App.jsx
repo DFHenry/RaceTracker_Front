@@ -9,12 +9,6 @@ function App()
 
   return(
     <>
-      {/* <BrowserRouter>
-      <Routes>
-        <Route index element={<Standby />} />
-      </Routes>
-
-      </BrowserRouter> */}
       <Standby />
     </>
   )

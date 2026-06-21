@@ -10,7 +10,9 @@ export default function Standby()
 
     return(
         <>
-            <h1>Dave's RFID Race Tracking System</h1>
+            <header>
+                <h1>Dave's RFID Race Tracking System</h1>
+            </header>
             <RaceData />
             <p></p>
         </>

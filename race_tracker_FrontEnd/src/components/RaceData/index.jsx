@@ -3,6 +3,13 @@ import RaceData from "../props/RaceData/raceData";
 import RacerReg from "../props/RacerReg/racerReg";
 import Laps from "../props/Laps/laps";
 
+//import images
+import cart1 from "../../assets/img/cart1.jpg";
+import cart2 from "../../assets/img/cart2.jpg";
+import cart3 from "../../assets/img/cart3.jpg";
+import cart4 from "../../assets/img/cart4.jpg";
+import chevron from "../../assets/img/chevronMask.svg";
+
 export default function getRacingData()
 {
     //api variables
@@ -199,6 +206,12 @@ export default function getRacingData()
         return(
             <div>
                 <p>Standby For A New Race</p>
+                <div class="standbyImages">
+                    <img src={cart1} alt="alt text here" />
+                    <img src={cart2} alt="alt text here" />
+                    <img src={cart3} alt="alt text here" />
+                    <img src={cart4} alt="alt text here" />
+                </div>
             </div>
         );
     }
@@ -207,20 +220,27 @@ export default function getRacingData()
     {    
         return(
             <>
-                <p>Registration is Active!</p>
-                <table>
+                <div class="regTitle">
+                    <h2>A New Race Is Beginning! See Attendant To Register!</h2>
+                </div>
+
+                <table class="regTable">
                     <thead>
                         <tr>
+                            <td>Vehicle</td>
                             <td>Racer Name</td>
-                            <td>Vehicle Number</td>
                         </tr>
-
                     </thead>
                     <tbody>
                         {racers.map((m, i) =>
-                            <tr key={i}>
-                                <td>{m.racerName}</td>
-                                <td>{m.vehicleNumber}</td>
+                            <tr className="racerData" key={i}>
+                                <td class="vehicleDot">
+                                    <img src={chevron} alt="chevron" />
+                                    <p>{m.vehicleNumber}</p>
+                                </td>
+                                <td class="regRacerName">
+                                    <p>{m.racerName}</p>
+                                </td>
                             </tr>
                         )}
                     </tbody>
@@ -233,9 +253,9 @@ export default function getRacingData()
     else if(racingData.raceState == "starting")
     {
         return(
-            <>
-                <p>Get Ready To Race!</p>
-            </>
+            <div class="raceStart">
+                <h2>Race Is Beginning! All Racers To Their Vehicles!</h2>
+            </div>
         )
     }
 
@@ -243,26 +263,31 @@ export default function getRacingData()
     {
         return(
             <>
-                <p>Race Is Running</p>
-                <p>{goMessage}</p>
-                <p>{watchMinutes.toString().padStart(2, "0")}:
+                <p class="stopwatch">{watchMinutes.toString().padStart(2, "0")}:
                    {watchSeconds.toString().padStart(2, "0")}:
                    {watchMilliseconds.toString().padStart(2, "0")} 
                 </p>
-                <table>
+                <p class="goMessage">{goMessage}</p>
+                <table class="raceTable">
                     <thead>
-                        <tr>
-                            <th>Position</th>
-                            <th>Racer</th>
+                        <tr class="raceTableHeadings">
+                            <th>PolePosition</th>
+                            <th>Racer name</th>
                             <th>Lap Time</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="allLapData">
                         {lapDisplay.map((m, i) => 
-                            <tr key={i}>
-                                <td>{m.polePosition}</td>
-                                <td>{m.lapRacer}</td>
-                                <td>{m.lapTime}</td>
+                            <tr class="lapData" key={i}>
+                                <td class="polePosition">
+                                    <img src={chevron} alt="chevron" />
+                                    <p>{m.polePosition}</p></td>
+                                <td class="runRacerName">
+                                    <p>{m.lapRacer}</p>
+                                </td>
+                                <td class="lapTime">
+                                    <p>{m.lapTime}</p>
+                                </td>
                             </tr>
                         )}
                     </tbody>
@@ -275,25 +300,36 @@ export default function getRacingData()
     {
         return(
             <>
-                <p>Race Has Concluded</p>
-                <table>
+                <div class="raceFinishedTitle">
+                    <h2>Race Is Finished!</h2>
+                    <h3>Final Positions</h3>
+                </div>
+
+                <table class="finalTable">
                     <thead>
-                        <tr>
+                        {/* <tr>
                             <th>Final Position</th>
                             <th>Name</th>
-                            <th>Time</th>
-                        </tr>
+                        </tr> */}
                     </thead>
-                    <tbody>
+                    <tbody class="finalLapBody">
                         {finalPositions.map((m, i) =>
-                            <tr key={i}>
-                                <td>{m.polePosition}</td>
-                                <td>{m.lapRacer}</td>
-                                <td>{m.lapTime}</td>
-                            </tr>
+                            <tr class="finalLapData" key={i}>
+                                <td class="finalPolePosition">
+                                    <img src={chevron} alt="" />
+                                    <p>{m.polePosition}</p></td>
+                                <td class="finalRacerName"><p>{m.lapRacer}</p></td>                            </tr>
                         )}
+                        {/* <tr class="finalLapData">
+                            <td class="finalPolePosition">
+                                <img src={chevron} alt="" />
+                                <p>1st</p>
+                            </td>
+                            <td class="finalRacerName"><p>David</p></td>
+                        </tr> */}
                     </tbody>
                 </table>
+                <p class="finalMessage">Congratulations!</p>
             </>
         )
     }
