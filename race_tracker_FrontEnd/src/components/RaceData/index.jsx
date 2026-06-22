@@ -4,6 +4,7 @@ import RacerReg from "../props/RacerReg/racerReg";
 import Laps from "../props/Laps/laps";
 
 //import images
+import bgImage from "../../assets/img/BG_CheckeredFlag.png";
 import cart1 from "../../assets/img/cart1.jpg";
 import cart2 from "../../assets/img/cart2.jpg";
 import cart3 from "../../assets/img/cart3.jpg";
@@ -205,7 +206,7 @@ export default function getRacingData()
     {
         return(
             <div>
-                <p>Standby For A New Race</p>
+                <h2 class="standbyTitle">Standby For A New Race</h2>
                 <div class="standbyImages">
                     <img src={cart1} alt="alt text here" />
                     <img src={cart2} alt="alt text here" />
@@ -227,13 +228,13 @@ export default function getRacingData()
                 <table class="regTable">
                     <thead>
                         <tr>
-                            <td>Vehicle</td>
-                            <td>Racer Name</td>
+                            <th class="tableTitle">Vehicle</th>
+                            <th class="tableTitle">Racer Name</th>
                         </tr>
                     </thead>
                     <tbody>
                         {racers.map((m, i) =>
-                            <tr className="racerData" key={i}>
+                            <tr class="racerData" key={i}>
                                 <td class="vehicleDot">
                                     <img src={chevron} alt="chevron" />
                                     <p>{m.vehicleNumber}</p>
@@ -320,13 +321,6 @@ export default function getRacingData()
                                     <p>{m.polePosition}</p></td>
                                 <td class="finalRacerName"><p>{m.lapRacer}</p></td>                            </tr>
                         )}
-                        {/* <tr class="finalLapData">
-                            <td class="finalPolePosition">
-                                <img src={chevron} alt="" />
-                                <p>1st</p>
-                            </td>
-                            <td class="finalRacerName"><p>David</p></td>
-                        </tr> */}
                     </tbody>
                 </table>
                 <p class="finalMessage">Congratulations!</p>

@@ -1,22 +1,35 @@
+/* IMPORTS */
+
+@font-face {
+  font-family: DaggerSquare;
+  src: url(/src/assets/font/DAGGERSQUARE_OBLIQUE.otf);
+}
+
+@font-face {
+  font-family: RacingSans;
+  src: url(/src/assets/font/RacingSansOne-Regular.ttf);
+}
 
 /* +++ BASIC RULES +++ */
 
 body
 {
-  background-color: black;
+  background-color: rgb(70, 70, 70);
   margin: 0;
+  background-image: url("/src/assets/img/BG_CheckeredFlag.png");
+  background-blend-mode: darken;
 }
 
-h1, h2, h3, p, td
+h1, h2, h3
 {
   color: #fff;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
+  font-family: DaggerSquare, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-th
+p, td, th
 {
   color: #fff;
+  font-family: RacingSans, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 td
@@ -37,6 +50,14 @@ thead td
 }
 
 /* === Standby Section Layouts === */
+
+.standbyTitle
+{
+  font-size: 3em;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 10px 0;
+}
 
 .standbyImages
 {
@@ -78,7 +99,7 @@ thead td
   animation-delay: 18s;
 }
 
-/* === Registration === */
+/* === Registration Section Layouts === */
 
 .regTitle
 {
@@ -91,12 +112,19 @@ thead td
   font-size: 1.5;
 }
 
+.tableTitle
+{
+  font-size: 2em;
+  text-align: left;
+  padding-left: 10px;
+}
+
 .regTable
 {
   margin-left: 10px;
   width: 90%;
   border: none;
-  border-spacing: 0 5px;
+  border-spacing: 0;
   margin-left: 5%;
 }
 
@@ -114,18 +142,27 @@ thead td
 {
   background-color: #333333;
   animation: newRacerReg 0.75s linear 0s;
+  margin-left: 15px;
 }
 
 .racerData td
 {
   color: #fff;
   height:75px;
+  border: 3px solid #e8edf0;
 }
 
 .racerData td:nth-child(1)
 {
   background-color: yellow;
   width: 100%;
+  border-style: solid;
+  border-right-width: 6px;
+}
+
+.racerData td:nth-child(2)
+{
+  border-style: solid solid solid none;
 }
 
 .vehicleDot
@@ -139,13 +176,13 @@ thead td
 
 .vehicleDot img
 {
-  height: 85px;
+  height: 79px;
 }
 
 .vehicleDot p
 {
   color: #000;
-  padding-right: 45px;
+  padding-right: 40px;
 }
 
 .regRacerName
@@ -156,7 +193,7 @@ thead td
 .regRacerName p
 {
   margin: 0;
-  margin-left: 25px;
+  margin-left: 35px;
 }
 
 /* === Starting === */
@@ -171,6 +208,7 @@ thead td
 
 .stopwatch
 {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   display: flex;
   justify-content: center;
   font-size: 6em;
@@ -190,13 +228,13 @@ thead td
   margin-left: 10px;
   width: 90%;
   border: none;
-  border-spacing: 0 5px;
+  border-spacing: 0;
   margin-left: 5%;
 }
 
 .raceTableHeadings th
 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
   font-size: 1.5em;
   text-align: left;
   padding-left: 5px;
@@ -226,11 +264,25 @@ thead td
 {
   color: #fff;
   height: 75px;
+  border: 3px solid #e8edf0;
 }
 
 .lapData td:nth-child(1)
 {
   background-color: yellow;
+  width: 100%;
+  border-style: solid;
+  border-right-width: 6px;
+}
+
+.lapData td:nth-child(2)
+{
+    border-style: solid none solid none;
+}
+
+.lapData td:nth-child(3)
+{
+  border: solid solid solid none;
 }
 
 .polePosition
@@ -258,6 +310,7 @@ thead td
 .runRacerName
 {
   font-size: 2.25em;
+  padding: 0;
 }
 
 .runRacerName p
@@ -265,11 +318,16 @@ thead td
   margin: 0px 0px 0px 25px;
 }
 
+.lapTime
+{
+  padding: 0;
+}
+
 .lapTime p
 {
   font-size: 2em;
   margin: 0 25px 0 0;
-
+  text-align: center;
 }
 
 /* === Finishing === */
@@ -298,13 +356,13 @@ thead td
   margin-left: 10px;
   width: 90%;
   border: none;
-  border-spacing: 0 5px;
+  border-spacing: 0;
   margin-left: 5%;
 }
 
 .finalTable th
 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
   font-size: 1.5em;
   text-align: left;
   padding-left: 5px;
@@ -348,11 +406,18 @@ thead td
 {
   color: #fff;
   height: 75px;
+  border: 3px solid #e8edf0;
 }
 
 .finalLapData td:nth-child(1)
 {
   background-color: yellow;
+    border-right-width: 6px;
+}
+
+.finalLapData td:nth-child(2)
+{
+  border-style: solid solid solid none;
 }
 
 .finalPolePosition
@@ -380,6 +445,8 @@ thead td
 .finalRacerName
 {
   font-size: 3em;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .finalRacerName p
@@ -397,7 +464,7 @@ thead td
 {
   display: flex;
   justify-content: center;
-  font-size: 2em;
+  font-size: 3em;
 }
 
 /* +++ ANIMATIONS +++ */
@@ -444,7 +511,6 @@ thead td
 }
 
 /* Animations for Pole Positions on finishing a race */
-
 @keyframes raceFinishing
 {
   0%
